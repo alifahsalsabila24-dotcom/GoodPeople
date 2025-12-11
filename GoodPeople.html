@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoodPeople - Berbagi Waktu, Menebar Kebaikan</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        gpBlue: '#4CB7FF',
+                        gpYellow: '#FFDA58',
+                        gpGreen: '#8BE184',
+                        gpSoft: '#F5F7FA',
+                        gpDark: '#333333',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Animations */
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333333;
+            overflow-x: hidden;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .category-icon {
+            transition: all 0.3s ease;
+        }
+
+        .category-icon:hover {
+            background-color: #FFDA58;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Hero Background */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('volunteer2.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Navigation Active State */
+        .nav-link.active {
+            color: #4CB7FF;
+            font-weight: 600;
+        }
+        
+        /* Hidden Sections Logic */
+        section {
+            display: none;
+        }
+        section.active-section {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gpSoft flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <div class="bg-gpBlue text-white p-2 rounded-full mr-2">
+                        <i class="fa-solid fa-hands-holding-heart fa-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gpBlue tracking-tight">Good<span class="text-gpYellow">People</span></h1>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" onclick="navigateTo('home')" class="nav-link text-gray-600 hover:text-gpBlue transition">Home</a>
+                    <a href="#" onclick="navigateTo('programs')" class="nav-link text-gray-600 hover:text-gpBlue transition">Program</a>
+                    <a href="#" onclick="navigateTo('about')" class="nav-link text-gray-600 hover:text-gpBlue transition">Tentang Kami</a>
+                    <a href="#" onclick="navigateTo('contact')" class="nav-link text-gray-600 hover:text-gpBlue transition">Kontak</a>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="hidden md:block">
+                    <button onclick="navigateTo('register')" class="bg-gpBlue hover:bg-blue-500 text-white px-6 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl">
+                        Gabung Relawan
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-gpBlue focus:outline-none">
+                        <i class="fa-solid fa-bars fa-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 space-y-3 shadow-lg">
+            <a href="#" onclick="navigateTo('home'); toggleMobileMenu()" class="block text-gray-600 font-medium">Home</a>
+            <a href="#" onclick="navigateTo('programs'); toggleMobileMenu()" class="block text-gray-600 font-medium">Program</a>
+            <a href="#" onclick="navigateTo('about'); toggleMobileMenu()" class="block text-gray-600 font-medium">Tentang Kami</a>
+            <a href="#" onclick="navigateTo('contact'); toggleMobileMenu()" class="block text-gray-600 font-medium">Kontak</a>
+            <button onclick="navigateTo('register'); toggleMobileMenu()" class="w-full bg-gpBlue text-white py-2 rounded-lg mt-2">Gabung Relawan</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow">
+
+        <!-- ======================= HOME PAGE ======================= -->
+        <section id="home" class="active-section fade-in">
+            <!-- Hero Section -->
+            <div class="hero-bg h-[600px] flex items-center justify-center text-center px-4 relative">
+                <div class="max-w-3xl text-white z-10">
+                    <span class="bg-gpYellow text-gpDark px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider mb-4 inline-block shadow-md">
+                        #KebaikanItuMenular
+                    </span>
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
+                        Ayo jadi bagian dari GoodPeople!
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 opacity-90 font-light">
+                        "Aksi kecilmu bisa berdampak besar. Berbagi waktu, menebar kebaikan untuk mereka yang membutuhkan."
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="navigateTo('programs')" class="bg-gpBlue hover:bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg transition transform hover:-translate-y-1 shadow-xl">
+                            Cari Kegiatan <i class="fa-solid fa-magnifying-glass ml-2"></i>
+                        </button>
+                        <button onclick="navigateTo('about')" class="bg-white hover:bg-gray-100 text-gpBlue px-8 py-4 rounded-full font-bold text-lg transition transform hover:-translate-y-1 shadow-xl">
+                            Pelajari Dulu
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stat Counter Floating -->
+                <div class="absolute bottom-[-30px] bg-white px-8 py-4 rounded-xl shadow-2xl flex items-center gap-4 hidden md:flex">
+                    <div class="text-4xl font-bold text-gpGreen">980+</div>
+                    <div class="text-gray-600 text-sm leading-tight text-left">
+                        Total Relawan<br>telah bergabung
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div class="py-20 container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gpDark mb-2">Pilih Aksi Kebaikanmu</h2>
+                    <p class="text-gray-500">Temukan isu sosial yang paling dekat dengan hatimu</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+                    <!-- Category Items -->
+                    <div class="group cursor-pointer" onclick="filterPrograms('Anak')">
+                        <div class="category-icon w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gpBlue group-hover:text-gpDark">
+                            <i class="fa-solid fa-child-reaching fa-2x"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Anak</h3>
+                    </div>
+                    <div class="group cursor-pointer" onclick="filterPrograms('Lansia')">
+                        <div class="category-icon w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 text-orange-500 group-hover:text-gpDark">
+                            <i class="fa-solid fa-hands-holding-circle fa-2x"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Lansia</h3>
+                    </div>
+                    <div class="group cursor-pointer" onclick="filterPrograms('Pedalaman')">
+                        <div class="category-icon w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3 text-yellow-600 group-hover:text-gpDark">
+                            <i class="fa-solid fa-map-location-dot fa-2x"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Pedalaman</h3>
+                    </div>
+                    <div class="group cursor-pointer" onclick="filterPrograms('Lingkungan')">
+                        <div class="category-icon w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 text-green-600 group-hover:text-gpDark">
+                            <i class="fa-solid fa-tree fa-2x"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Lingkungan</h3>
+                    </div>
+                    <div class="group cursor-pointer" onclick="filterPrograms('Hewan')">
+                        <div class="category-icon w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 text-pink-500 group-hover:text-gpDark">
+                            <i class="fa-solid fa-paw fa-2x"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Hewan</h3>
+                    </div>
+                    <div class="group cursor-pointer" onclick="filterPrograms('Kesehatan')">
+                        <div class="category-icon w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 text-red-500 group-hover:text-gpDark">
+                            <i class="fa-solid fa-heart-pulse fa-2x"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Kesehatan</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Volunteer Section -->
+            <div class="bg-white py-20">
+                <div class="container mx-auto px-4">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="order-2 md:order-1">
+                            <img src="volunteer.jpg" alt="Volunteers High Five" class="rounded-3xl shadow-2xl hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="order-1 md:order-2">
+                            <h2 class="text-3xl font-bold text-gpDark mb-6">Kenapa Volunteer itu <span class="text-gpBlue">Penting?</span></h2>
+                            <div class="space-y-6">
+                                <div class="flex gap-4">
+                                    <div class="w-12 h-12 bg-gpBlue rounded-lg flex-shrink-0 flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg">Pengalaman Berharga</h4>
+                                        <p class="text-gray-600 text-sm">Dapatkan skill baru dan pengalaman lapangan yang tidak diajarkan di sekolah.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-12 h-12 bg-gpYellow rounded-lg flex-shrink-0 flex items-center justify-center text-gpDark">
+                                        <i class="fa-solid fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg">Empati & Jejaring</h4>
+                                        <p class="text-gray-600 text-sm">Bertemu teman baru yang satu visi dan memahami perspektif kehidupan lain.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-12 h-12 bg-gpGreen rounded-lg flex-shrink-0 flex items-center justify-center text-white">
+                                        <i class="fa-solid fa-earth-asia"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg">Dampak Nyata</h4>
+                                        <p class="text-gray-600 text-sm">Waktumu, sekecil apapun, membawa perubahan besar bagi mereka yang membutuhkan.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gpBlue py-16 text-center text-white px-4">
+                <h2 class="text-3xl font-bold mb-4">Gabung sekarang dan buat perbedaan!</h2>
+                <p class="mb-8 opacity-90 text-lg">"Relawan bukan soal besar hadiah, tapi besar hati."</p>
+                <button onclick="navigateTo('register')" class="bg-gpYellow text-gpDark px-8 py-3 rounded-full font-bold text-lg hover:bg-white hover:text-gpBlue transition shadow-lg">
+                    Daftar Jadi Relawan
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================= PROGRAMS PAGE ======================= -->
+        <section id="programs" class="fade-in py-10 container mx-auto px-4 min-h-screen">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gpDark">Program Kebaikan</h2>
+                <p class="text-gray-500 mt-2">Pilih kegiatan yang sesuai dengan minat dan waktumu</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10" id="program-filters">
+                <button onclick="renderPrograms('All')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition active-filter bg-gpBlue text-white">Semua</button>
+                <button onclick="renderPrograms('Anak')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Anak</button>
+                <button onclick="renderPrograms('Lansia')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Lansia</button>
+                <button onclick="renderPrograms('Lingkungan')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Lingkungan</button>
+                <button onclick="renderPrograms('Pendidikan')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Pendidikan</button>
+                <button onclick="renderPrograms('Kesehatan')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Kesehatan</button>
+            </div>
+
+            <!-- Program Grid Container -->
+            <div id="program-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Javascript will populate this -->
+            </div>
+        </section>
+
+        <!-- ======================= DETAIL PROGRAM PAGE ======================= -->
+        <section id="program-detail" class="fade-in py-10 container mx-auto px-4">
+            <!-- Back Button -->
+            <button onclick="navigateTo('programs')" class="mb-6 flex items-center text-gray-500 hover:text-gpBlue transition">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke List Program
+            </button>
+
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div class="grid md:grid-cols-2">
+                    <!-- Image Side -->
+                    <div class="h-64 md:h-full relative">
+                        <img id="detail-image" src="" alt="Detail" class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4">
+                            <span id="detail-category" class="bg-gpYellow text-gpDark px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
+                                Category
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Side -->
+                    <div class="p-8 md:p-12">
+                        <h1 id="detail-title" class="text-3xl font-bold text-gpDark mb-2">Nama Program</h1>
+                        <div class="flex items-center text-gray-500 mb-6 text-sm">
+                            <i class="fa-solid fa-location-dot mr-2 text-gpBlue"></i>
+                            <span id="detail-location">Lokasi</span>
+                            <span class="mx-3">•</span>
+                            <i class="fa-regular fa-calendar mr-2 text-gpBlue"></i>
+                            <span id="detail-date">Tanggal</span>
+                        </div>
+
+                        <div class="prose max-w-none text-gray-600 mb-8">
+                            <h3 class="font-bold text-gray-800 mb-2">Deskripsi</h3>
+                            <p id="detail-desc" class="mb-4">Deskripsi kegiatan.</p>
+                            
+                            <h3 class="font-bold text-gray-800 mb-2">Persyaratan Relawan</h3>
+                            <ul id="detail-req" class="list-disc list-inside space-y-1 ml-2">
+                                <!-- Filled by JS -->
+                            </ul>
+                        </div>
+
+                        <div class="bg-blue-50 p-4 rounded-xl mb-8 border border-blue-100">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-semibold text-gray-600">Sisa Kuota</span>
+                                <span id="detail-quota" class="font-bold text-gpBlue">12 Orang</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2.5">
+                                <div class="bg-gpBlue h-2.5 rounded-full" style="width: 70%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 italic">"Satu langkah kecilmu sangat berarti bagi mereka."</p>
+                        </div>
+
+                        <button onclick="navigateTo('register')" class="w-full bg-gpBlue hover:bg-blue-600 text-white font-bold py-4 rounded-xl transition shadow-lg transform active:scale-95">
+                            Daftar Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= REGISTER PAGE ======================= -->
+        <section id="register" class="fade-in py-12 container mx-auto px-4">
+            <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gpBlue rounded-full flex items-center justify-center mx-auto mb-4 text-white">
+                        <i class="fa-solid fa-user-plus fa-2x"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gpDark">Formulir Pendaftaran</h2>
+                    <p class="text-gray-500">Isi data dirimu dan mulailah perjalanan kebaikanmu.</p>
+                </div>
+
+                <form onsubmit="handleRegister(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Nama Lengkap</label>
+                        <input type="text" required class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-gpBlue focus:ring-1 focus:ring-gpBlue transition" placeholder="Contoh: Budi Santoso">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Alamat Email</label>
+                        <input type="email" required class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-gpBlue focus:ring-1 focus:ring-gpBlue transition" placeholder="emailmu@contoh.com">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Kategori Minat</label>
+                        <select class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-gpBlue focus:ring-1 focus:ring-gpBlue transition">
+                            <option>Pendidikan & Anak</option>
+                            <option>Kesehatan</option>
+                            <option>Lingkungan & Alam</option>
+                            <option>Panti Jompo / Lansia</option>
+                            <option>Hewan & Shelter</option>
+                            <option>Daerah Pedalaman</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Motivasi Bergabung</label>
+                        <textarea required rows="4" class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:border-gpBlue focus:ring-1 focus:ring-gpBlue transition" placeholder="Ceritakan kenapa kamu ingin menjadi relawan..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gpGreen hover:bg-green-500 text-white font-bold py-4 rounded-xl transition shadow-lg transform hover:-translate-y-1">
+                        Kirim Pendaftaran
+                    </button>
+                    
+                    <p class="text-center text-sm text-gray-400 mt-4">Data kamu aman bersama kami. GoodPeople menjaga privasi relawan.</p>
+                </form>
+            </div>
+        </section>
+
+        <!-- ======================= ABOUT PAGE ======================= -->
+        <section id="about" class="fade-in py-12 container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gpDark mb-4">Tentang <span class="text-gpBlue">GoodPeople</span></h2>
+                    <p class="text-xl text-gray-600 italic">"Generasi muda yang peduli dan berdaya"</p>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-lg p-8 mb-10 border-l-8 border-gpBlue">
+                    <h3 class="text-2xl font-bold mb-4">Filosofi Kami</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        GoodPeople lahir dari keresahan sederhana: banyak orang baik yang ingin membantu, tapi bingung harus mulai dari mana. Kami hadir sebagai jembatan yang menghubungkan niat tulus dengan aksi nyata. Kami percaya bahwa kebaikan itu seperti efek domino—satu dorongan kecil bisa menciptakan gerakan besar.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-lg hover-lift">
+                        <div class="w-12 h-12 bg-gpYellow rounded-full flex items-center justify-center mb-4 text-gpDark">
+                            <i class="fa-solid fa-eye fa-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Visi</h3>
+                        <p class="text-gray-600">Menjadi platform kerelawanan terdepan yang menciptakan ekosistem sosial yang inklusif, di mana setiap anak muda merasa berdaya untuk berkontribusi.</p>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-3xl shadow-lg hover-lift">
+                        <div class="w-12 h-12 bg-gpGreen rounded-full flex items-center justify-center mb-4 text-white">
+                            <i class="fa-solid fa-person-walking-luggage fa-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Misi</h3>
+                        <ul class="text-gray-600 space-y-2 list-disc list-inside">
+                            <li>Menghubungkan niat baik dengan aksi nyata.</li>
+                            <li>Memperluas akses kegiatan sosial ke seluruh pelosok.</li>
+                            <li>Mendorong anak muda terlibat aktif dalam masyarakat.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= CONTACT PAGE ======================= -->
+        <section id="contact" class="fade-in py-16 container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-gpDark mb-2">Hubungi Kami</h2>
+                <p class="text-gray-500 mb-10">Punya pertanyaan atau ingin kolaborasi? Yuk, ngobrol!</p>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <i class="fa-brands fa-whatsapp text-4xl text-green-500 mb-4"></i>
+                        <h3 class="font-bold text-gray-800">WhatsApp</h3>
+                        <p class="text-gray-500 text-sm mt-1">+62 812-3456-7890</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <i class="fa-regular fa-envelope text-4xl text-gpBlue mb-4"></i>
+                        <h3 class="font-bold text-gray-800">Email</h3>
+                        <p class="text-gray-500 text-sm mt-1">halo@goodpeople.id</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <i class="fa-solid fa-map-location text-4xl text-gpYellow mb-4"></i>
+                        <h3 class="font-bold text-gray-800">Markas</h3>
+                        <p class="text-gray-500 text-sm mt-1">Jl. Kebaikan No. 1, Jakarta Selatan</p>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-gray-800 mb-6">Temukan kami di Social Media</h3>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="w-12 h-12 bg-pink-500 text-white rounded-full flex items-center justify-center hover:bg-pink-600 transition transform hover:scale-110">
+                        <i class="fa-brands fa-instagram fa-lg"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800 transition transform hover:scale-110">
+                        <i class="fa-brands fa-tiktok fa-lg"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition transform hover:scale-110">
+                        <i class="fa-brands fa-youtube fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gpDark text-white py-10 mt-auto">
+        <div class="container mx-auto px-4 grid md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <h3 class="text-2xl font-bold mb-4 text-gpBlue">Good<span class="text-gpYellow">People</span></h3>
+                <p class="text-gray-400 mb-4 pr-10">
+                    "Bersama kita bisa memberi dampak nyata. Mulailah langkah kecilmu hari ini, karena dunia butuh lebih banyak orang baik sepertimu."
+                </p>
+                <p class="text-sm text-gray-500">© 2023 GoodPeople Initiative.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Menu</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><a href="#" onclick="navigateTo('home')" class="hover:text-gpBlue">Home</a></li>
+                    <li><a href="#" onclick="navigateTo('programs')" class="hover:text-gpBlue">Cari Kegiatan</a></li>
+                    <li><a href="#" onclick="navigateTo('about')" class="hover:text-gpBlue">Tentang Kami</a></li>
+                    <li><a href="#" onclick="navigateTo('register')" class="hover:text-gpBlue">Daftar Relawan</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Newsletter</h4>
+                <p class="text-xs text-gray-400 mb-2">Dapatkan info kegiatan terbaru.</p>
+                <div class="flex">
+                    <input type="text" placeholder="Email kamu" class="px-3 py-2 rounded-l-lg bg-gray-700 text-white focus:outline-none w-full text-sm">
+                    <button class="bg-gpBlue px-3 py-2 rounded-r-lg hover:bg-blue-600 font-bold"><i class="fa-regular fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- POPUP MODAL (Hidden by default) -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center px-4">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl transform scale-100 transition-transform">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-check text-4xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Terima Kasih!</h3>
+            <p class="text-gray-600 mb-6">Pendaftaranmu berhasil terkirim. Admin kami akan menghubungi Anda melalui Email.</p>
+            <button onclick="closeModal()" class="w-full bg-gpBlue text-white font-bold py-3 rounded-xl hover:bg-blue-600">Oke, Siap!</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA DUMMY PROGRAM ---
+        const programsData = [
+            {
+                id: 1,
+                title: "Kebahagiaan untuk Adik Kita",
+                location: "Panti Asuhan Mutiara, Jakarta",
+                category: "Anak",
+                image: "anak.jpg",
+                date: "20 Jan 2026",
+                quota: 15,
+                desc: "Mengajak anak-anak panti asuhan bermain, belajar menggambar, dan makan siang bersama. Mari ukir senyum di wajah mereka.",
+                req: ["Ramah anak", "Sabar", "Membawa alat tulis (opsional)"]
+            },
+            {
+                id: 2,
+                title: "Teman Cerita Lansia",
+                location: "Wisma Senja, Depok",
+                category: "Lansia",
+                image: "lansia.jpg",
+                date: "22 Des 2025",
+                quota: 10,
+                desc: "Menjadi pendengar yang baik bagi kakek dan nenek di panti jompo. Kegiatan meliputi senam ringan, mewarnai, bermain games.",
+                req: ["Pendengar yang baik", "Sopan santun", "Sudah vaksin booster"]
+            },
+            {
+                id: 3,
+                title: "Aksi Bersih Pantai",
+                location: "Pantai Ancol, Jakarta",
+                category: "Lingkungan",
+                image: "pantai.jpg",
+                date: "3 Feb 2026",
+                quota: 50,
+                desc: "Bersama membersihkan sampah plastik di area bibir pantai untuk menjaga ekosistem laut. Sarung tangan disediakan.",
+                req: ["Fisik sehat", "Membawa tumbler sendiri", "Tidak takut kotor"]
+            },
+            {
+                id: 4,
+                title: "Pendidikan untuk Desa",
+                location: "Desa Pelosok, NTT",
+                category: "Pendidikan", // Maps to 'Pedalaman' visually but category key
+                image: "desa.jpg",
+                date: "1-5 Des 2023",
+                quota: 15,
+                desc: "Program mengajar intensif selama 5 hari untuk anak-anak di daerah pedalaman yang kekurangan tenaga pengajar.",
+                req: ["Minat mengajar", "Bisa adaptasi lingkungan", "Komitmen 5 hari"]
+            },
+            {
+                id: 5,
+                title: "Shelter Care",
+                location: "Rumah Kucing, Bandung",
+                category: "Hewan",
+                image: "kucing.jpg",
+                date: "26 Des 2025",
+                quota: 10,
+                desc: "Membantu membersihkan kandang, memberi makan, dan grooming kucing-kucing terlantar yang diselamatkan.",
+                req: ["Pecinta hewan", "Tidak alergi bulu", "Telaten"]
+            },
+            {
+                id: 6,
+                title: "Kampanye Kesehatan Gigi",
+                location: "SDN 1 Yogyakarta",
+                category: "Kesehatan",
+                image: "gigi.jpg",
+                date: "25 Fev 2026",
+                quota: 20,
+                desc: "Edukasi cara menyikat gigi yang benar dan pembagian sikat gigi gratis untuk anak SD.",
+                req: ["Background kesehatan (diutamakan)", "Komunikatif", "Ceria"]
+            },
+            {
+                id: 7,
+                title: "Hutan Lestari",
+                location: "Sentul, Bogor",
+                category: "Lingkungan",
+                image: "pohon.jpg",
+                date: "27 Des 2025",
+                quota: 30,
+                desc: "Penanaman 1000 pohon bibit mahoni dan jati untuk penghijauan area resapan air.",
+                req: ["Suka alam", "Membawa topi", "Fisik kuat"]
+            },
+            {
+                id: 8,
+                title: "Smile Day for Kids",
+                location: "Bekasi",
+                category: "Anak",
+                image: "buku.jpg",
+                date: "12 Jan 2026",
+                quota: 15,
+                desc: "Pembagian buku cerita dan dongeng keliling untuk meningkatkan minat baca anak.",
+                req: ["Suka mendongeng", "Ekspresif", "Menyukai anak kecil"]
+            }
+        ];
+
+        // --- NAVIGATION LOGIC ---
+        function navigateTo(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.remove('active-section');
+                sec.classList.remove('fade-in'); // Reset animation
+            });
+
+            // Show target section
+            const target = document.getElementById(sectionId);
+            if(target) {
+                target.classList.add('active-section');
+                // Trigger reflow to restart animation
+                void target.offsetWidth; 
+                target.classList.add('fade-in');
+                window.scrollTo(0, 0);
+            }
+
+            // Update Nav visual
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            // Simple logic to highlight nav based on section (approximate)
+            // Ideally, pass 'this' or manage state better, but this works for basic SPA
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- RENDER PROGRAMS ---
+        function renderPrograms(filter) {
+            const grid = document.getElementById('program-grid');
+            grid.innerHTML = ''; // Clear existing
+
+            // Update filter buttons visual
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.textContent.includes(filter) || (filter === 'All' && btn.textContent === 'Semua')) {
+                    btn.classList.remove('bg-white', 'text-gray-600');
+                    btn.classList.add('bg-gpBlue', 'text-white');
+                } else {
+                    btn.classList.add('bg-white', 'text-gray-600');
+                    btn.classList.remove('bg-gpBlue', 'text-white');
+                }
+            });
+
+            // Filter Logic
+            const filteredData = filter === 'All' 
+                ? programsData 
+                : programsData.filter(item => item.category === filter || (filter === 'Pendidikan' && item.title.includes('Pendidikan')) || (filter === 'Pedalaman' && item.location.includes('NTT')));
+
+            // Generate Cards
+            filteredData.forEach(item => {
+                const card = `
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover-lift flex flex-col h-full border border-gray-100">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-gpBlue text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                            ${item.category}
+                        </span>
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col">
+                        <div class="text-xs text-gray-400 mb-2 flex items-center">
+                            <i class="fa-solid fa-location-dot mr-1"></i> ${item.location}
+                        </div>
+                        <h3 class="font-bold text-lg text-gpDark mb-2 leading-tight">${item.title}</h3>
+                        <p class="text-sm text-gray-500 line-clamp-2 mb-4 flex-grow">${item.desc}</p>
+                        <button onclick="showDetail(${item.id})" class="mt-auto w-full border border-gpBlue text-gpBlue font-medium py-2 rounded-lg hover:bg-gpBlue hover:text-white transition">
+                            Lihat Detail
+                        </button>
+                    </div>
+                </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        // --- SHOW DETAIL LOGIC ---
+        function showDetail(id) {
+            const program = programsData.find(p => p.id === id);
+            if(!program) return;
+
+            // Populate Data
+            document.getElementById('detail-image').src = program.image;
+            document.getElementById('detail-category').innerText = program.category;
+            document.getElementById('detail-title').innerText = program.title;
+            document.getElementById('detail-location').innerText = program.location;
+            document.getElementById('detail-date').innerText = program.date;
+            document.getElementById('detail-desc').innerText = program.desc;
+            document.getElementById('detail-quota').innerText = program.quota + " Orang";
+
+            // Populate Requirements List
+            const reqList = document.getElementById('detail-req');
+            reqList.innerHTML = '';
+            program.req.forEach(r => {
+                reqList.innerHTML += `<li>${r}</li>`;
+            });
+
+            // Switch view
+            navigateTo('program-detail');
+        }
+
+        // --- FORM HANDLING ---
+        function handleRegister(e) {
+            e.preventDefault();
+            // Show Modal
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+            // Reset form
+            document.querySelector('form').reset();
+            navigateTo('home');
+        }
+
+        // --- CATEGORY SHORTCUT FROM HOME ---
+        function filterPrograms(category) {
+            navigateTo('programs');
+            renderPrograms(category);
+            // Scroll to filters
+            setTimeout(() => {
+                document.getElementById('program-filters').scrollIntoView({behavior: 'smooth'});
+            }, 100);
+        }
+
+        // Initialize
+        window.onload = function() {
+            renderPrograms('All');
+        }
+
+    </script>
+</body>
+</html>
