@@ -73,6 +73,7 @@
 
         /* Hero Background */
         .hero-bg {
+            /* Dikembalikan ke volunteer2.jpg */
             background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('volunteer2.jpg');
             background-size: cover;
             background-position: center;
@@ -90,6 +91,12 @@
         }
         section.active-section {
             display: block;
+        }
+
+        /* Payment Option Selected State */
+        .payment-option.selected {
+            border-color: #4CB7FF;
+            background-color: #F0F9FF;
         }
     </style>
 </head>
@@ -232,6 +239,7 @@
                 <div class="container mx-auto px-4">
                     <div class="grid md:grid-cols-2 gap-12 items-center">
                         <div class="order-2 md:order-1">
+                            <!-- Dikembalikan ke volunteer.jpg -->
                             <img src="volunteer.jpg" alt="Volunteers High Five" class="rounded-3xl shadow-2xl hover:scale-105 transition duration-500">
                         </div>
                         <div class="order-1 md:order-2">
@@ -290,6 +298,8 @@
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-2 mb-10" id="program-filters">
                 <button onclick="renderPrograms('All')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition active-filter bg-gpBlue text-white">Semua</button>
+                <button onclick="renderPrograms('Paid')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600"><i class="fa-solid fa-crown mr-1 text-gpYellow"></i> Premium/Expedition</button>
+                <button onclick="renderPrograms('Free')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Free Volunteer</button>
                 <button onclick="renderPrograms('Anak')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Anak</button>
                 <button onclick="renderPrograms('Lansia')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Lansia</button>
                 <button onclick="renderPrograms('Lingkungan')" class="filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gpBlue hover:text-white hover:border-gpBlue transition bg-white text-gray-600">Lingkungan</button>
@@ -315,9 +325,13 @@
                     <!-- Image Side -->
                     <div class="h-64 md:h-full relative">
                         <img id="detail-image" src="" alt="Detail" class="w-full h-full object-cover">
-                        <div class="absolute top-4 left-4">
-                            <span id="detail-category" class="bg-gpYellow text-gpDark px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
+                        <div class="absolute top-4 left-4 flex flex-col gap-2">
+                            <span id="detail-category" class="bg-gpYellow text-gpDark px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md w-max">
                                 Category
+                            </span>
+                            <!-- FITUR BARU: Badge Tipe Program -->
+                            <span id="detail-type-badge" class="bg-gpBlue text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md w-max">
+                                Free
                             </span>
                         </div>
                     </div>
@@ -338,9 +352,22 @@
                             <p id="detail-desc" class="mb-4">Deskripsi kegiatan.</p>
                             
                             <h3 class="font-bold text-gray-800 mb-2">Persyaratan Relawan</h3>
-                            <ul id="detail-req" class="list-disc list-inside space-y-1 ml-2">
+                            <ul id="detail-req" class="list-disc list-inside space-y-1 ml-2 mb-4">
                                 <!-- Filled by JS -->
                             </ul>
+
+                            <!-- FITUR BARU: Section Biaya Premium -->
+                            <div id="premium-cost-section" class="hidden mt-6 bg-orange-50 p-4 rounded-xl border border-orange-200">
+                                <h3 class="font-bold text-gray-800 mb-2 flex items-center">
+                                    <i class="fa-solid fa-wallet text-orange-500 mr-2"></i> Biaya Kontribusi
+                                </h3>
+                                <p class="text-sm text-gray-500 italic mb-2">"Dana digunakan untuk operasional, donasi, dan pemberdayaan masyarakat lokal."</p>
+                                <div class="text-2xl font-bold text-gpBlue mb-3" id="detail-cost">Rp 0</div>
+                                <h4 class="font-semibold text-sm text-gray-700 mb-1">Termasuk:</h4>
+                                <ul id="detail-cost-list" class="list-none space-y-1 text-sm text-gray-600">
+                                    <!-- Populated via JS -->
+                                </ul>
+                            </div>
                         </div>
 
                         <div class="bg-blue-50 p-4 rounded-xl mb-8 border border-blue-100">
@@ -407,6 +434,103 @@
                     
                     <p class="text-center text-sm text-gray-400 mt-4">Data kamu aman bersama kami. GoodPeople menjaga privasi relawan.</p>
                 </form>
+            </div>
+        </section>
+
+        <!-- ======================= PAYMENT PAGE (NEW) ======================= -->
+        <section id="payment" class="fade-in py-12 container mx-auto px-4">
+            <div class="max-w-xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+                <div class="bg-gpBlue p-6 text-center text-white">
+                    <h2 class="text-2xl font-bold">Pembayaran</h2>
+                    <p class="opacity-90">Selesaikan pembayaran untuk mengamankan slotmu.</p>
+                </div>
+                <div class="p-8">
+                    <!-- Order Summary -->
+                    <div class="mb-8 border-b border-gray-100 pb-6">
+                        <p class="text-sm text-gray-500 mb-1">Program</p>
+                        <h3 class="font-bold text-gpDark text-lg mb-2" id="pay-program-title">Nama Program</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500">Total Tagihan</span>
+                            <span class="text-2xl font-bold text-gpBlue" id="pay-amount">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <h4 class="font-bold text-gray-700 mb-4">Pilih Metode Pembayaran</h4>
+                    
+                    <div class="space-y-4 mb-8">
+                        <!-- QRIS -->
+                        <div id="qris-box" class="payment-option border border-gray-200 rounded-xl p-4 cursor-pointer transition" onclick="selectPayment('qris')">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="font-bold flex items-center"><i class="fa-solid fa-qrcode mr-3 text-gpDark w-6"></i> QRIS</div>
+                                <div class="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center radio-circle">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-gpBlue hidden"></div>
+                                </div>
+                            </div>
+                            <div class="hidden mt-4" id="qris-details">
+                                <div class="bg-gray-50 p-6 rounded-lg flex flex-col items-center justify-center border border-gray-200 border-dashed">
+                                   <!-- Placeholder QR Code -->
+                                   <div class="bg-white p-2 rounded shadow-sm">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=GoodPeoplePayment" alt="QRIS Code" class="w-32 h-32">
+                                   </div>
+                                   <p class="text-center text-xs text-gray-500 mt-3">Scan menggunakan GoPay, OVO, Dana, LinkAja, atau Mobile Banking.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Virtual Account -->
+                        <div id="va-box" class="payment-option border border-gray-200 rounded-xl p-4 cursor-pointer transition" onclick="selectPayment('va')">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="font-bold flex items-center"><i class="fa-solid fa-building-columns mr-3 text-gpDark w-6"></i> Virtual Account</div>
+                                 <div class="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center radio-circle">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-gpBlue hidden"></div>
+                                </div>
+                            </div>
+                             <div class="hidden space-y-3 mt-4" id="va-details">
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <div class="flex items-center"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" class="h-4 mr-2" alt="BCA"> BCA</div>
+                                    <span class="font-mono font-bold text-gray-700">880123456789</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <div class="flex items-center"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" class="h-4 mr-2" alt="Mandiri"> Mandiri</div>
+                                    <span class="font-mono font-bold text-gray-700">890123456789</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <div class="flex items-center"><img src="https://upload.wikimedia.org/wikipedia/commons/9/97/Logo_BRI.png" class="h-4 mr-2" alt="BRI"> BRI</div>
+                                    <span class="font-mono font-bold text-gray-700">1234567890123</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- E-Wallet -->
+                         <div id="ewallet-box" class="payment-option border border-gray-200 rounded-xl p-4 cursor-pointer transition" onclick="selectPayment('ewallet')">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="font-bold flex items-center"><i class="fa-solid fa-wallet mr-3 text-gpDark w-6"></i> E-Wallet</div>
+                                 <div class="w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center radio-circle">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-gpBlue hidden"></div>
+                                </div>
+                            </div>
+                             <div class="hidden space-y-3 mt-4" id="ewallet-details">
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <span class="font-medium text-gray-700">GoPay</span>
+                                    <span class="font-mono font-bold text-gray-700">0812-3456-7890</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <span class="font-medium text-gray-700">OVO</span>
+                                    <span class="font-mono font-bold text-gray-700">0812-3456-7890</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    <span class="font-medium text-gray-700">Dana</span>
+                                    <span class="font-mono font-bold text-gray-700">0812-3456-7890</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="processPayment()" class="w-full bg-gpGreen hover:bg-green-500 text-white font-bold py-4 rounded-xl transition shadow-lg transform hover:-translate-y-1">
+                        Konfirmasi Pembayaran
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -527,20 +651,27 @@
                 <i class="fa-solid fa-check text-4xl text-green-500"></i>
             </div>
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Terima Kasih!</h3>
-            <p class="text-gray-600 mb-6">Pendaftaranmu berhasil terkirim. Admin kami akan menghubungi Anda melalui Email.</p>
+            <p id="success-message" class="text-gray-600 mb-6">Pendaftaranmu berhasil terkirim. Admin kami akan menghubungi Anda melalui Email.</p>
             <button onclick="closeModal()" class="w-full bg-gpBlue text-white font-bold py-3 rounded-xl hover:bg-blue-600">Oke, Siap!</button>
         </div>
     </div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // Store current program for payment logic
+        let currentProgram = null;
+
         // --- DATA DUMMY PROGRAM ---
+        // FITUR BARU: Menambahkan field 'type', 'cost', dan 'costDetails'
         const programsData = [
             {
                 id: 1,
                 title: "Kebahagiaan untuk Adik Kita",
                 location: "Panti Asuhan Mutiara, Jakarta",
                 category: "Anak",
+                type: "free", // Free
+                cost: 0,
+                // Dikembalikan ke anak.jpg
                 image: "anak.jpg",
                 date: "20 Jan 2026",
                 quota: 15,
@@ -552,6 +683,9 @@
                 title: "Teman Cerita Lansia",
                 location: "Wisma Senja, Depok",
                 category: "Lansia",
+                type: "free",
+                cost: 0,
+                // Dikembalikan ke lansia.jpg
                 image: "lansia.jpg",
                 date: "22 Des 2025",
                 quota: 10,
@@ -563,6 +697,9 @@
                 title: "Aksi Bersih Pantai",
                 location: "Pantai Ancol, Jakarta",
                 category: "Lingkungan",
+                type: "free",
+                cost: 0,
+                // Dikembalikan ke pantai.jpg
                 image: "pantai.jpg",
                 date: "3 Feb 2026",
                 quota: 50,
@@ -573,11 +710,15 @@
                 id: 4,
                 title: "Pendidikan untuk Desa",
                 location: "Desa Pelosok, NTT",
-                category: "Pendidikan", // Maps to 'Pedalaman' visually but category key
+                category: "Pendidikan", 
+                type: "paid", // FITUR PREMIUM (Expedition)
+                cost: "Rp 2.500.000",
+                costDetails: ["Transportasi Lokal & Kapal", "Homestay Warga", "Konsumsi 3x Sehari", "Donasi Pembangunan Sekolah", "Kaos & Dokumentasi"],
+                // Dikembalikan ke desa.jpg
                 image: "desa.jpg",
                 date: "1-5 Des 2023",
                 quota: 15,
-                desc: "Program mengajar intensif selama 5 hari untuk anak-anak di daerah pedalaman yang kekurangan tenaga pengajar.",
+                desc: "Program live-in dan mengajar intensif selama 5 hari untuk anak-anak di daerah pedalaman yang kekurangan tenaga pengajar. Rasakan pengalaman autentik.",
                 req: ["Minat mengajar", "Bisa adaptasi lingkungan", "Komitmen 5 hari"]
             },
             {
@@ -585,6 +726,9 @@
                 title: "Shelter Care",
                 location: "Rumah Kucing, Bandung",
                 category: "Hewan",
+                type: "free",
+                cost: 0,
+                // Dikembalikan ke kucing.jpg
                 image: "kucing.jpg",
                 date: "26 Des 2025",
                 quota: 10,
@@ -596,6 +740,9 @@
                 title: "Kampanye Kesehatan Gigi",
                 location: "SDN 1 Yogyakarta",
                 category: "Kesehatan",
+                type: "free",
+                cost: 0,
+                // Dikembalikan ke gigi.jpg
                 image: "gigi.jpg",
                 date: "25 Fev 2026",
                 quota: 20,
@@ -607,10 +754,14 @@
                 title: "Hutan Lestari",
                 location: "Sentul, Bogor",
                 category: "Lingkungan",
+                type: "paid", // FITUR PREMIUM (Mini Expedition)
+                cost: "Rp 150.000",
+                costDetails: ["Bibit Pohon Mahoni", "Snack & Makan Siang", "Alat Tanam (Pinjam)", "Sertifikat"],
+                // Dikembalikan ke pohon.jpg
                 image: "pohon.jpg",
                 date: "27 Des 2025",
                 quota: 30,
-                desc: "Penanaman 1000 pohon bibit mahoni dan jati untuk penghijauan area resapan air.",
+                desc: "Penanaman 1000 pohon bibit mahoni dan jati untuk penghijauan area resapan air. Kontribusi digunakan untuk pembelian bibit.",
                 req: ["Suka alam", "Membawa topi", "Fisik kuat"]
             },
             {
@@ -618,12 +769,45 @@
                 title: "Smile Day for Kids",
                 location: "Bekasi",
                 category: "Anak",
+                type: "free",
+                cost: 0,
+                // Dikembalikan ke buku.jpg
                 image: "buku.jpg",
                 date: "12 Jan 2026",
                 quota: 15,
                 desc: "Pembagian buku cerita dan dongeng keliling untuk meningkatkan minat baca anak.",
                 req: ["Suka mendongeng", "Ekspresif", "Menyukai anak kecil"]
-            }
+            },
+            {
+                id: 9,
+                title: "Konservasi Penyu Bali",
+                location: "Gianyar, Bali",
+                category: "Lingkungan",
+                type: "paid", // FITUR PREMIUM (Mini Expedition)
+                cost: "Rp 1.800.000",
+                costDetails: ["Transportasi", "Penginapan", "Konsumsi 3x Sehari", "Sertifikat", "Kaos & Dokumentasi"],
+                // Dikembalikan ke penyu.jpg
+                image: "penyu.jpg",
+                date: "27-29 Des 2025",
+                quota: 30,
+                desc: "Belajar dan berkontribusi langsung dalam pelestarian penyu. Mulai dari pembersihan pantai, perawatan tukik, hingga pelepasan kembali ke laut.",
+                req: ["Suka alam", "Peduli Lingkungan", "Fisik kuat", "Bisa Berenang (Nilai Plus)"]
+            },
+            {
+                id: 10,
+                title: "Ekspedisi Sumba: Air Untuk Kehidupan",
+                location: "Sumba Timur, NTT",
+                category: "Lingkungan",
+                type: "paid", // FITUR PREMIUM (Mini Expedition)
+                cost: "Rp 2.500.000",
+                costDetails: ["Transportasi", "Penginapan", "Konsumsi 3x Sehari", "Sertifikat", "Kaos & Dokumentasi", "Donasi Desa", "Material Bangunan"],
+                // Dikembalikan ke air.jpg
+                image: "air.jpg",
+                date: "3-6 Des 2025",
+                quota: 25,
+                desc: "Program live-in bersama masyarakat lokal untuk membangun instalasi air bersih dan sanitasi. Rasakan pengalaman budaya yang autentik sambil memberikan dampak nyata.",
+                req: ["Suka alam", "Peduli Lingkungan", "Fisik kuat", "Siap Tinggal di Pedalaman"]
+            },
         ];
 
         // --- NAVIGATION LOGIC ---
@@ -646,8 +830,6 @@
 
             // Update Nav visual
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            // Simple logic to highlight nav based on section (approximate)
-            // Ideally, pass 'this' or manage state better, but this works for basic SPA
         }
 
         // Mobile Menu Toggle
@@ -663,7 +845,13 @@
 
             // Update filter buttons visual
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                if(btn.textContent.includes(filter) || (filter === 'All' && btn.textContent === 'Semua')) {
+                const btnText = btn.textContent.trim();
+                const isMatch = (filter === 'All' && btnText === 'Semua') || 
+                                (filter === 'Paid' && btnText.includes('Premium')) ||
+                                (filter === 'Free' && btnText.includes('Free')) ||
+                                (btnText === filter);
+
+                if(isMatch) {
                     btn.classList.remove('bg-white', 'text-gray-600');
                     btn.classList.add('bg-gpBlue', 'text-white');
                 } else {
@@ -672,17 +860,35 @@
                 }
             });
 
-            // Filter Logic
-            const filteredData = filter === 'All' 
-                ? programsData 
-                : programsData.filter(item => item.category === filter || (filter === 'Pendidikan' && item.title.includes('Pendidikan')) || (filter === 'Pedalaman' && item.location.includes('NTT')));
+            // Filter Logic (Updated for Paid/Free)
+            const filteredData = programsData.filter(item => {
+                if(filter === 'All') return true;
+                if(filter === 'Paid') return item.type === 'paid';
+                if(filter === 'Free') return item.type === 'free';
+                
+                // Existing filters logic + simple fallback match
+                return item.category === filter || 
+                       (filter === 'Pendidikan' && item.title.includes('Pendidikan')) || 
+                       (filter === 'Pedalaman' && item.location.includes('NTT'));
+            });
 
             // Generate Cards
             filteredData.forEach(item => {
+                // Logic badge & color
+                const isPaid = item.type === 'paid';
+                const badgeColor = isPaid ? 'bg-gpYellow text-gpDark' : 'bg-gpGreen text-white';
+                const badgeText = isPaid ? 'Expedition' : 'Free Volunteer';
+                const priceDisplay = isPaid ? `<span class="font-bold text-gpDark">${item.cost}</span>` : '<span class="font-bold text-gpGreen">Gratis</span>';
+
                 const card = `
-                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover-lift flex flex-col h-full border border-gray-100">
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover-lift flex flex-col h-full border border-gray-100 relative">
                     <div class="h-48 overflow-hidden relative">
                         <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                        <!-- Tipe Badge (Free/Expedition) -->
+                        <span class="absolute top-3 left-3 ${badgeColor} text-xs font-bold px-3 py-1 rounded-full shadow-sm z-10">
+                            ${badgeText}
+                        </span>
+                        <!-- Kategori Badge -->
                         <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-gpBlue text-xs font-bold px-3 py-1 rounded-full shadow-sm">
                             ${item.category}
                         </span>
@@ -693,9 +899,15 @@
                         </div>
                         <h3 class="font-bold text-lg text-gpDark mb-2 leading-tight">${item.title}</h3>
                         <p class="text-sm text-gray-500 line-clamp-2 mb-4 flex-grow">${item.desc}</p>
-                        <button onclick="showDetail(${item.id})" class="mt-auto w-full border border-gpBlue text-gpBlue font-medium py-2 rounded-lg hover:bg-gpBlue hover:text-white transition">
-                            Lihat Detail
-                        </button>
+                        
+                        <div class="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
+                             <div class="text-sm text-gray-500">
+                                ${priceDisplay}
+                             </div>
+                             <button onclick="showDetail(${item.id})" class="text-gpBlue font-medium text-sm hover:underline">
+                                Lihat Detail <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 `;
@@ -708,7 +920,10 @@
             const program = programsData.find(p => p.id === id);
             if(!program) return;
 
-            // Populate Data
+            // Set current program globally for payment logic
+            currentProgram = program;
+
+            // Populate Data Basic
             document.getElementById('detail-image').src = program.image;
             document.getElementById('detail-category').innerText = program.category;
             document.getElementById('detail-title').innerText = program.title;
@@ -716,6 +931,33 @@
             document.getElementById('detail-date').innerText = program.date;
             document.getElementById('detail-desc').innerText = program.desc;
             document.getElementById('detail-quota').innerText = program.quota + " Orang";
+
+            // FITUR BARU: Update Badge Tipe di Halaman Detail
+            const typeBadge = document.getElementById('detail-type-badge');
+            const costSection = document.getElementById('premium-cost-section');
+            
+            if(program.type === 'paid') {
+                typeBadge.innerText = "Volunteer Expedition";
+                typeBadge.className = "bg-gpYellow text-gpDark px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md w-max";
+                
+                // Show Cost Section
+                costSection.classList.remove('hidden');
+                document.getElementById('detail-cost').innerText = program.cost;
+                
+                // Populate Cost List
+                const costList = document.getElementById('detail-cost-list');
+                costList.innerHTML = '';
+                program.costDetails.forEach(detail => {
+                    costList.innerHTML += `<li class="flex items-start"><i class="fa-solid fa-circle-check text-green-500 mt-1 mr-2 text-xs"></i> ${detail}</li>`;
+                });
+
+            } else {
+                typeBadge.innerText = "Free Volunteer";
+                typeBadge.className = "bg-gpGreen text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md w-max";
+                
+                // Hide Cost Section
+                costSection.classList.add('hidden');
+            }
 
             // Populate Requirements List
             const reqList = document.getElementById('detail-req');
@@ -731,7 +973,57 @@
         // --- FORM HANDLING ---
         function handleRegister(e) {
             e.preventDefault();
-            // Show Modal
+            
+            // LOGIC BARU: Cek apakah program berbayar
+            if (currentProgram && currentProgram.type === 'paid') {
+                // Populate data ke halaman pembayaran
+                document.getElementById('pay-program-title').innerText = currentProgram.title;
+                document.getElementById('pay-amount').innerText = currentProgram.cost;
+                
+                // Reset payment selection UI
+                resetPaymentUI();
+
+                // Navigasi ke halaman pembayaran
+                navigateTo('payment');
+            } else {
+                // Jika gratis, langsung sukses
+                document.getElementById('success-message').innerText = "Pendaftaranmu berhasil terkirim. Admin kami akan menghubungi Anda melalui Email.";
+                document.getElementById('success-modal').classList.remove('hidden');
+            }
+        }
+
+        // --- PAYMENT LOGIC ---
+        function resetPaymentUI() {
+            // Sembunyikan semua detail
+            ['qris', 'va', 'ewallet'].forEach(method => {
+                document.getElementById(method + '-details').classList.add('hidden');
+                const box = document.getElementById(method + '-box');
+                box.classList.remove('selected', 'border-gpBlue', 'bg-blue-50');
+                box.classList.add('border-gray-200');
+                // Hide radio circle dot
+                box.querySelector('.radio-circle div').classList.add('hidden');
+            });
+        }
+
+        function selectPayment(method) {
+            // Reset dulu semua
+            resetPaymentUI();
+
+            // Tampilkan detail yang dipilih
+            document.getElementById(method + '-details').classList.remove('hidden');
+            
+            // Highlight box
+            const box = document.getElementById(method + '-box');
+            box.classList.remove('border-gray-200');
+            box.classList.add('selected', 'border-gpBlue', 'bg-blue-50');
+            
+            // Show radio circle dot
+            box.querySelector('.radio-circle div').classList.remove('hidden');
+        }
+
+        function processPayment() {
+            // Simulasi proses pembayaran
+            document.getElementById('success-message').innerText = "Pembayaran Berhasil! Terima kasih telah bergabung dalam program Volunteer Expedition.";
             document.getElementById('success-modal').classList.remove('hidden');
         }
 
